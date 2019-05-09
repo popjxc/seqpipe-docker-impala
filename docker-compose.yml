@@ -5,10 +5,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: parrotstream/hadoop:latest
-    external_links:
-    - zookeeper
     ports:
+    # ssh
+    - "2022:22"
+    # Zookeeper
+
+    # Hadoop
     - 9870:9870
     - 9864:9864
     - 8020:8020
@@ -19,4 +21,4 @@ services:
 networks:
   default:
     external:
-      name: parrot_default
+      name: seqpipe_default
