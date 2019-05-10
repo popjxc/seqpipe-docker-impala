@@ -108,7 +108,8 @@ ADD ./impala/etc/hadoop/conf/core-site.xml /etc/impala/conf/
 ADD ./impala/etc/hadoop/conf/hdfs-site.xml /etc/impala/conf/
 ADD ./impala/etc/impala/conf/hive-site.xml /etc/impala/conf/
 
-EXPOSE 21000 21050 25000 25010 25020
+# Impala Ports
+EXPOSE 21000 21050 22000 23000 24000 25000 25010 26000 28000
 
 # Various helper scripts
 ADD ./impala/bin/start-impala.sh /

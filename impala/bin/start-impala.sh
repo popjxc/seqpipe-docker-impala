@@ -23,6 +23,7 @@ fi
 supervisorctl start impala-server
 
 /wait-for-it.sh localhost:21000 -t 120
+/wait-for-it.sh localhost:22000 -t 120
 /wait-for-it.sh localhost:21050 -t 120
 /wait-for-it.sh localhost:25000 -t 120
 rc=$?
