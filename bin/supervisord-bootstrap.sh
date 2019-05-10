@@ -62,7 +62,7 @@ $HIVE_HOME/bin/schematool -dbType postgres -initSchema
 
 mkdir -p /opt/hive/hcatalog/var/log
 
-supervisorctl start hcat
+supervisorctl start hive_metastore
 
 /wait-for-it.sh localhost:9083 -t 240
 
@@ -78,3 +78,4 @@ echo -e "\n\n-------------------------------------------------------------------
 echo -e "Hive Metastore running on localhost:9083"
 echo -e "--------------------------------------------------------------------------------\n\n"
 
+/start-impala.sh

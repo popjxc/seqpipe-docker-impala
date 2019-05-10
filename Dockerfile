@@ -93,8 +93,26 @@ EXPOSE 9083
 
 WORKDIR /
 
+# Impala
+
+RUN yum install -y impala impala-server impala-shell impala-catalog impala-state-store
+RUN yum clean all
+
+RUN groupadd supergroup; \ 
+    usermod -a -G supergroup impala; \
+    usermod -a -G hdfs impala; \
+    usermod -a -G supergroup hive; \
+    usermod -a -G hdfs hive
+
+ADD ./impala/etc/hadoop/conf/core-site.xml /etc/impala/conf/
+ADD ./impala/etc/hadoop/conf/hdfs-site.xml /etc/impala/conf/
+ADD ./impala/etc/impala/conf/hive-site.xml /etc/impala/conf/
+
+EXPOSE 21000 21050 25000 25010 25020
 
 # Various helper scripts
+ADD ./impala/bin/start-impala.sh /
+
 ADD ./hdfs/bin/start-hdfs.sh /
 
 ADD ./etc/supervisord.conf /etc/
