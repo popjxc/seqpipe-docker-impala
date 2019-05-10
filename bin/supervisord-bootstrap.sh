@@ -13,7 +13,7 @@ cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 rm -f /tmp/zookeeper 2> /dev/null
 
 supervisorctl start sshd
-./wait-for-it.sh localhost:22 -t 120
+/wait-for-it.sh localhost:22 -t 120
 rc=$?
 if [ $rc -ne 0 ]; then
     echo -e "\n--------------------------------------------"
@@ -25,7 +25,7 @@ fi
 supervisorctl start zookeeper
 
 
-./wait-for-it.sh localhost:2181 -t 120
+/wait-for-it.sh localhost:2181 -t 120
 rc=$?
 if [ $rc -ne 0 ]; then
     echo -e "\n--------------------------------------------"
@@ -34,7 +34,7 @@ if [ $rc -ne 0 ]; then
     exit $rc
 fi
 
-./start-hdfs.sh
+/start-hdfs.sh
 
 echo -e "\n\n--------------------------------------------------------------------------------"
 echo -e "You can now access to the following Hadoop Web UIs:"
@@ -42,3 +42,39 @@ echo -e ""
 echo -e "Hadoop - NameNode:                     http://localhost:9870"
 echo -e "Hadoop - DataNode:                     http://localhost:9864"
 echo -e "--------------------------------------------------------------------------------\n\n"
+
+
+
+supervisorctl start postgresql
+
+/wait-for-it.sh localhost:5432 -t 120
+rc=$?
+if [ $rc -ne 0 ]; then
+    echo -e "\n--------------------------------------------"
+    echo -e "      PostgreSQL not ready! Exiting..."
+    echo -e "--------------------------------------------"
+	exit $rc
+fi
+
+psql -h localhost -U postgres -c "CREATE DATABASE metastore;" 2>/dev/null
+
+$HIVE_HOME/bin/schematool -dbType postgres -initSchema
+
+mkdir -p /opt/hive/hcatalog/var/log
+
+supervisorctl start hcat
+
+/wait-for-it.sh localhost:9083 -t 240
+
+rc=$?
+if [ $rc -ne 0 ]; then
+    echo -e "\n---------------------------------------"
+    echo -e "  Hive Metastore not ready! Exiting..."
+    echo -e "---------------------------------------"
+    exit $rc
+fi
+
+echo -e "\n\n--------------------------------------------------------------------------------"
+echo -e "Hive Metastore running on localhost:9083"
+echo -e "--------------------------------------------------------------------------------\n\n"
+
