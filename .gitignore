@@ -1,2 +1,3 @@
 /Dockerfile.proxy
 /docker-compose-proxy.yml
+docker-compose.yml
