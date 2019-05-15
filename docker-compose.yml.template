@@ -1,6 +1,6 @@
-version: '3'
+version: '3.7'
 services:
-  hadoop:
+  impala:
     
     build:
       context: .
@@ -25,6 +25,13 @@ services:
     - 25000:25000
     - 25010:25010
     - 25020:25020
+
+    volumes:
+      - type: bind
+        source: <path to host data dir>
+        target: /data
+        volume:
+            nocopy: false
 
 networks:
   default:

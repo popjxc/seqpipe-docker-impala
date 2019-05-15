@@ -34,6 +34,9 @@ if [ $rc -ne 0 ]; then
     exit $rc
 fi
 
+mkdir -p /data/dn/
+chown hdfs:hadoop -R /data/dn
+
 /start-hdfs.sh
 
 echo -e "\n\n--------------------------------------------------------------------------------"
@@ -56,11 +59,13 @@ if [ $rc -ne 0 ]; then
 	exit $rc
 fi
 
-psql -h localhost -U postgres -c "CREATE DATABASE metastore;" 2>/dev/null
+psql -h localhost -U postgres -c "CREATE DATABASE metastore;"
 
 $HIVE_HOME/bin/schematool -dbType postgres -initSchema
 
 mkdir -p /opt/hive/hcatalog/var/log
+
+psql -h localhost -U postgres -d metastore -a -f /fix_default_location.sql
 
 supervisorctl start hive_metastore
 

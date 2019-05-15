@@ -48,7 +48,7 @@ EXPOSE 50030 50060 13562 10020 19888
 RUN yum -y install postgresql-server postgresql postgresql-contrib pwgen
 
 
-#Sudo requires a tty. fix that.
+# Sudo requires a tty. fix that.
 RUN sed -i 's/.*requiretty$/#Defaults requiretty/' /etc/sudoers
 
 ADD ./postgresql/postgresql-setup /usr/bin/postgresql-setup
@@ -125,7 +125,8 @@ RUN chmod +x /*.sh
 # ADD ./hive/conf/hive-site.xml /opt/hive/conf
 RUN rm -f $HIVE_CONF_DIR/hive-site.xml $HIVE_CONF_DIR/hive-log4j2.properties
 ADD ./hive/conf/hive-site.xml $HIVE_HOME/conf/
-# ADD ./hive/conf/hive-log4j2.properties $HIVE_HOME/conf/
 
+# ADD ./hive/conf/hive-log4j2.properties $HIVE_HOME/conf/
+ADD hive/psql/fix_default_location.sql /
 
 ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf", "-n"]
