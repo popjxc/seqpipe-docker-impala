@@ -1,55 +1,73 @@
-# **hadoop**
+# Seqpipe Impala Docker container
 ___
 
-### Description
+* Copy `docker-compose.yml.template` to `docker-compose.yml` and edit source
+  directory to match an existing directory on the host file system
 
-This image runs the [*Cloudera CDH Hadoop*](https://www.cloudera.com/products/open-source/apache-hadoop/key-cdh-components.html) in a **pseudo-distributed** mode on a Centos 7 Linux distribution.
+* Invoke
+  
+  ```bash
+  docker-compose pull
+  ```
 
-The *latest* tag of this image is build with the latest available release of CDH on Centos 7.
+  to download the `seqpipe-docker-impala` prebuild Docker image from DockerHub
 
-You can pull it with:
+* Alternatively you can run
 
-    docker pull parrotstream/hadoop
+    ```bash
+    docker-compose build
+    ```
+  to build the docker image.
+
+* If you want to start Docker container run:
+
+    ```bash
+    docker-compose up
+    ```
+  This will run the docker container specified in `docker-compose.yml` file.
+
+* If you want the Docker container run as a deamon, you can run:
+  
+    ```bash
+    docker-compose up -d
+    ```
+
+* If the Docker container is run as a deamon you can stop it by using:
+
+    ```bash
+    docker-compose down
+    ```
+
+* To see all running Docker continers you can use
+  
+    ```bash
+    docker ps
+    ```
+
+* To enter into running Docker container environment you can use:
+
+    ```bash
+    docker exec -it <container name/ID> /bin/bash
+    ```
+
+  where container name or ID could be found using `docker ps` commnand.
 
 
-You can also find other images based on different Apache Hadoop releases, using a different tag in the following form:
+* Simple python function to execute SQL queries on localy running Impla Docker container
+  
+    ```python
+    from impala.dbapi import connect
 
-    docker pull parrotstream/hadoop:[hadoop-release]-[cdh-release]
+    def run_sql(sql):
+        with connect(host='localhost', port=21050) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(sql)
+                for row in cursor:
+                    print(row)
+    ```
 
+  For example you can run:
+    ```python
+    run_sql("""SHOW DATABASES""")
+    ```
 
-For example, if you want Apache Hadoop release 2.6.0 on CDH 5.11.1 you can pull the image with:
-
-    docker pull parrotstream/hadoop:2.6.0-cdh5.11.1
-
-Run with Docker Compose:
-
-    docker-compose -p parrot up
-
-
-Once started you'll be able to read the list of all the Hadoop Web GUIs urls:
-
-| **Hadoop Web UIs**        |**URL**                            |
-|:--------------------------|:----------------------------------|
-| *Hadoop Name Node*        | http://localhost:50070            |
-| *Hadoop Data Node*        | http://localhost:50075            |
-| *YARN Node Manager*       | http://localhost:8042             |
-| *YARN Resource Manager*   | http://localhost:8088             |
-| *YARN Timeline History*   | http://localhost:8188             |
-| *MapReduce Job History*   | http://localhost:19888/jobhistory |
-
-While the Hadoop Docker container is running, you can always get the urls' list with the script:
-
-    print-urls.sh
-
-included in the GitHub source repository.
-
-
-### Available tags:
-
-- Apache Hadoop 3.0.0-cdh6.0.0 ([3.0.0-cdh6.0.0](https://github.com/parrot-stream/docker-hadoop/blob/3.0.0-cdh6.0.0/Dockerfile))
-- Apache Hadoop 2.8.1 ([2.8.1](https://github.com/parrot-stream/docker-hadoop/blob/2.8.1/Dockerfile))
-- Apache Hadoop 2.8.0 ([2.8.0](https://github.com/parrot-stream/docker-hadoop/blob/2.8.0/Dockerfile))
-- Apache Hadoop 2.7.3 ([2.7.3](https://github.com/parrot-stream/docker-hadoop/blob/2.7.3/Dockerfile))
-- Apache Hadoop 2.6.4 ([2.6.4](https://github.com/parrot-stream/docker-hadoop/blob/2.6.4/Dockerfile))
-- Apache Hadoop 2.6.0-cdh5.15.1 ([2.6.0-cdh5.15.1](https://github.com/parrot-stream/docker-hadoop/blob/2.6.0-cdh5.11.1/Dockerfile))
-- Apache Hadoop 2.6.0-cdh5.11.1 ([2.6.0-cdh5.11.1](https://github.com/parrot-stream/docker-hadoop/blob/2.6.0-cdh5.11.1/Dockerfile))

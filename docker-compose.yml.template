@@ -2,6 +2,7 @@ version: '3.7'
 services:
   impala:
     
+    image: seqpipe/seqpipe-docker-impala:latest    
     build:
       context: .
       dockerfile: Dockerfile
@@ -33,7 +34,7 @@ services:
         volume:
             nocopy: false
 
-networks:
-  default:
-    external:
-      name: seqpipe_default
+# networks:
+#   default:
+#     external:
+#       name: seqpipe_default
