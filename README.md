@@ -1,5 +1,12 @@
 # Seqpipe Impala Docker container
 ___
+* Create conda environment `impala` to use with Impala Docker container
+  and activate it:
+
+    ```bash
+    conda env create -n impala -f conda-environment.yml
+    conda activate impala
+    ```
 
 * Copy `docker-compose.yml.template` to `docker-compose.yml` and edit source
   directory to match an existing directory on the host file system
