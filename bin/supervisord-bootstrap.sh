@@ -65,9 +65,13 @@ $HIVE_HOME/bin/schematool -dbType postgres -initSchema
 
 mkdir -p /opt/hive/hcatalog/var/log
 
+supervisorctl start hive_metastore
+
+/wait-for-it.sh localhost:9083 -t 240
+
 psql -h localhost -U postgres -d metastore -a -f /fix_default_location.sql
 
-supervisorctl start hive_metastore
+supervisorctl restart hive_metastore
 
 /wait-for-it.sh localhost:9083 -t 240
 
