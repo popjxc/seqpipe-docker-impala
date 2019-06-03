@@ -42,8 +42,8 @@ chown hdfs:hadoop -R /data/dn
 echo -e "\n\n--------------------------------------------------------------------------------"
 echo -e "You can now access to the following Hadoop Web UIs:"
 echo -e ""
-echo -e "Hadoop - NameNode:                     http://localhost:9870"
-echo -e "Hadoop - DataNode:                     http://localhost:9864"
+echo -e "Hadoop - NameNode:                     http://impala:9870"
+echo -e "Hadoop - DataNode:                     http://impala:9864"
 echo -e "--------------------------------------------------------------------------------\n\n"
 
 
