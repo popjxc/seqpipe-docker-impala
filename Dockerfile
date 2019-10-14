@@ -74,14 +74,15 @@ EXPOSE 5432
 
 
 # HIVE
-ENV HIVE_VER 3.1.1
+ENV HIVE_VER 3.1.2
 
 ENV HIVE_HOME /opt/hive
 ENV HIVE_CONF_DIR $HIVE_HOME/conf
 
 ENV PATH $HIVE_HOME/bin:$PATH
 
-RUN wget http://it.apache.contactlab.it/hive/hive-$HIVE_VER/apache-hive-$HIVE_VER-bin.tar.gz
+RUN wget https://www-us.apache.org/dist/hive/hive-${HIVE_VER}/apache-hive-${HIVE_VER}-bin.tar.gz
+
 RUN tar -xvf apache-hive-$HIVE_VER-bin.tar.gz -C ..; \
     mv ../apache-hive-$HIVE_VER-bin $HIVE_HOME
 RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.5.jar -O $HIVE_HOME/lib/postgresql-42.2.5.jar
