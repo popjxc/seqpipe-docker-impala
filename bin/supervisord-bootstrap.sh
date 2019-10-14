@@ -61,6 +61,29 @@ fi
 
 psql -h localhost -U postgres -c "CREATE DATABASE metastore;"
 
+export COUNT=0
+
+while :
+do
+    export COUNT=COUNT+1
+    sleep 2
+
+    export RESULT=$(psql -h localhost -U postgres -c "CREATE DATABASE metastore;" 2>&1)
+
+    if [[ ($RESULT =~ "already exists") || ($RESULT =~ "CREATE DATABASE") ]]; then
+            echo "DONE: database 'metastore' exists"
+            break
+    else
+            echo "ERROR: database 'metastore' not created"
+            export DONE=0
+    fi
+
+    if [[ $COUNT > 10 ]];
+    then
+            break
+    fi
+done
+
 $HIVE_HOME/bin/schematool -dbType postgres -initSchema
 
 mkdir -p /opt/hive/hcatalog/var/log
