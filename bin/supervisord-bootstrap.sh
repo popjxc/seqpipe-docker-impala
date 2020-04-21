@@ -59,7 +59,7 @@ if [ $rc -ne 0 ]; then
 	exit $rc
 fi
 
-psql -h localhost -U postgres -c "CREATE DATABASE metastore;"
+# psql -h localhost -U postgres -c "CREATE DATABASE metastore;"
 
 export COUNT=0
 
