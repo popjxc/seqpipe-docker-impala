@@ -65,8 +65,8 @@ export COUNT=0
 
 while :
 do
-    export COUNT=COUNT+1
-    sleep 2
+    ((COUNT+=1))
+    sleep 5
 
     export RESULT=$(psql -h localhost -U postgres -c "CREATE DATABASE metastore;" 2>&1)
 
