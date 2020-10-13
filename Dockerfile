@@ -31,7 +31,6 @@ EXPOSE 2181 2888 3888
 
 # HDFS
 RUN yum install -y hadoop-hdfs-namenode hadoop-hdfs-datanode
-
 RUN mkdir -p /var/run/hdfs-sockets; \
     chown hdfs.hadoop /var/run/hdfs-sockets
 RUN mkdir -p /data/dn/
@@ -119,6 +118,12 @@ ADD ./hdfs/bin/start-hdfs.sh /
 
 ADD ./etc/supervisord.conf /etc/
 
+ADD ./udafs/build_udafs.sh /
+
+ADD ./udafs/create_udafs.sh /
+
+ADD ./udafs/upload_udafs_to_hdfs.sh /
+
 ADD ./bin/supervisord-bootstrap.sh /
 ADD ./bin/wait-for-it.sh /
 RUN chmod +x /*.sh
@@ -129,5 +134,12 @@ ADD ./hive/conf/hive-site.xml $HIVE_HOME/conf/
 
 # ADD ./hive/conf/hive-log4j2.properties $HIVE_HOME/conf/
 ADD hive/psql/fix_default_location.sql /
+
+# Impala custom UDAFs
+RUN yum install -y gcc-c++ cmake boost-devel impala-udf-devel
+
+RUN /build_udafs.sh
+
+ADD ./udafs/udaf_create_queries /
 
 ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf", "-n"]

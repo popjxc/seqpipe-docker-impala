@@ -1,0 +1,1 @@
+create aggregate function if not exists first_val(string) returns string location '/user/hive/udafs/libgpfuda.so' update_fn='FirstUpdate';
