@@ -1,1 +1,3 @@
-create aggregate function if not exists first_val(string) returns string location '/user/hive/udafs/libgpfuda.so' update_fn='FirstUpdate';
+create aggregate function if not exists gpf_first(string) returns string location '/user/hive/udafs/libgpfuda.so' update_fn='FirstUpdate';
+create aggregate function if not exists gpf_or(boolean) returns boolean location '/user/hive/udafs/libgpfuda.so' update_fn='OrUpdate';
+create aggregate function if not exists gpf_bit_or(bigint) returns bigint returns string location '/user/hive/udafs/libgpfuda.so' update_fn='BitOrUpdate';
