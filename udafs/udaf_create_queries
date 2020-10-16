@@ -1,4 +1,4 @@
 create aggregate function if not exists gpf_first(string) returns string location '/user/hive/udafs/libgpfuda.so' update_fn='FirstUpdate';
 create aggregate function if not exists gpf_or(boolean) returns boolean location '/user/hive/udafs/libgpfuda.so' update_fn='OrUpdate';
 create aggregate function if not exists gpf_or(int) returns boolean location '/user/hive/udafs/libgpfuda.so' update_fn='OrIntUpdate';
-create aggregate function if not exists gpf_bit_or(bigint) returns bigint returns string location '/user/hive/udafs/libgpfuda.so' update_fn='BitOrUpdate';
+create aggregate function if not exists gpf_bit_or(bigint) returns bigint location '/user/hive/udafs/libgpfuda.so' update_fn='BitOrUpdate';
