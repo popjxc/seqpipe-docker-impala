@@ -118,10 +118,6 @@ ADD ./hdfs/bin/start-hdfs.sh /
 
 ADD ./etc/supervisord.conf /etc/
 
-ADD ./bin/supervisord-bootstrap.sh /
-ADD ./bin/wait-for-it.sh /
-RUN chmod +x /*.sh
-
 # ADD ./hive/conf/hive-site.xml /opt/hive/conf
 RUN rm -f $HIVE_CONF_DIR/hive-site.xml $HIVE_CONF_DIR/hive-log4j2.properties
 ADD ./hive/conf/hive-site.xml $HIVE_HOME/conf/
@@ -138,6 +134,10 @@ ADD ./udafs/upload_udafs_to_hdfs.sh /
 ADD ./udafs/udaf_create_queries /
 
 RUN /build_udafs.sh
+
+ADD ./bin/supervisord-bootstrap.sh /
+ADD ./bin/wait-for-it.sh /
+RUN chmod +x /*.sh
 
 
 ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf", "-n"]
