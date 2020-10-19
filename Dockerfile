@@ -118,12 +118,6 @@ ADD ./hdfs/bin/start-hdfs.sh /
 
 ADD ./etc/supervisord.conf /etc/
 
-ADD ./udafs/build_udafs.sh /
-
-ADD ./udafs/create_udafs.sh /
-
-ADD ./udafs/upload_udafs_to_hdfs.sh /
-
 ADD ./bin/supervisord-bootstrap.sh /
 ADD ./bin/wait-for-it.sh /
 RUN chmod +x /*.sh
@@ -138,8 +132,12 @@ ADD hive/psql/fix_default_location.sql /
 # Impala custom UDAFs
 RUN yum install -y gcc-c++ cmake boost-devel impala-udf-devel
 
+ADD ./udafs/build_udafs.sh /
+ADD ./udafs/create_udafs.sh /
+ADD ./udafs/upload_udafs_to_hdfs.sh /
+ADD ./udafs/udaf_create_queries /
+
 RUN /build_udafs.sh
 
-ADD ./udafs/udaf_create_queries /
 
 ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf", "-n"]

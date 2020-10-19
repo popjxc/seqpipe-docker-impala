@@ -109,8 +109,28 @@ if [ $rc -ne 0 ]; then
     exit 1
 fi
 
+
 echo -e "\n\n--------------------------------------------------------------------------------"
 echo -e "Hive Metastore running on localhost:9083"
 echo -e "--------------------------------------------------------------------------------\n\n"
 
+
 /start-impala.sh
+
+
+rc=$?
+if [ $rc -ne 0 ]; then
+    echo -e "\n---------------------------------------"
+    echo -e "     Impala not ready! Can't create UDAFs..."
+    echo -e "---------------------------------------"
+    exit $rc
+fi
+
+
+echo -e "\n--------------------------------------------"
+echo -e "      Creating UDAFs..."
+echo -e "--------------------------------------------"
+
+
+/create_udafs.sh
+
