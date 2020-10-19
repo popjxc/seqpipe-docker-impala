@@ -131,6 +131,6 @@ echo -e "\n--------------------------------------------"
 echo -e "      Creating UDAFs..."
 echo -e "--------------------------------------------"
 
-
+/upload_udafs_to_hdfs.sh
 /create_udafs.sh
 
