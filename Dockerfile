@@ -16,6 +16,9 @@ RUN yum clean all; yum update -y
 RUN yum install -y ant which openssh-clients openssh-server python-setuptools git
 RUN easy_install supervisor
 
+# Impala custom UDAFs
+RUN yum install -y gcc-c++ cmake boost-devel impala-udf-devel
+
 RUN wget https://github.com/apache/zookeeper/archive/release-$ZOOKEEPER_VER.tar.gz
 RUN tar -xvf release-$ZOOKEEPER_VER.tar.gz -C ..; \
     mv ../zookeeper-release-$ZOOKEEPER_VER $ZOOKEEPER_HOME
@@ -124,9 +127,6 @@ ADD ./hive/conf/hive-site.xml $HIVE_HOME/conf/
 
 # ADD ./hive/conf/hive-log4j2.properties $HIVE_HOME/conf/
 ADD hive/psql/fix_default_location.sql /
-
-# Impala custom UDAFs
-RUN yum install -y gcc-c++ cmake boost-devel impala-udf-devel
 
 ADD ./udafs/build_udafs.sh /
 ADD ./udafs/create_udafs.sh /
