@@ -37,6 +37,7 @@ fi
 mkdir -p /data/dn/
 chown hdfs:hadoop -R /data/dn
 
+chmod a+r -R /etc/hadoop/* 
 /start-hdfs.sh
 
 echo -e "\n\n--------------------------------------------------------------------------------"
@@ -114,7 +115,7 @@ echo -e "\n\n-------------------------------------------------------------------
 echo -e "Hive Metastore running on localhost:9083"
 echo -e "--------------------------------------------------------------------------------\n\n"
 
-
+chmod a+r -R /etc/impala/*
 /start-impala.sh
 
 

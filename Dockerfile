@@ -16,6 +16,9 @@ RUN yum clean all; yum update -y
 RUN yum install -y ant which openssh-clients openssh-server python-setuptools git
 RUN easy_install supervisor
 
+# PostgreSQL
+RUN yum -y install postgresql-server postgresql postgresql-contrib pwgen
+
 # Impala custom UDAFs
 RUN yum install -y gcc-c++ cmake boost-devel impala-udf-devel
 
@@ -34,6 +37,13 @@ EXPOSE 2181 2888 3888
 
 # HDFS
 RUN yum install -y hadoop-hdfs-namenode hadoop-hdfs-datanode
+
+# Impala
+
+RUN yum install -y impala impala-server impala-shell impala-catalog impala-state-store
+RUN yum clean all
+
+
 RUN mkdir -p /var/run/hdfs-sockets; \
     chown hdfs.hadoop /var/run/hdfs-sockets
 RUN mkdir -p /data/dn/
@@ -41,13 +51,10 @@ RUN chown hdfs.hadoop /data/dn
 
 ADD hdfs/etc/hadoop/conf/core-site.xml /etc/hadoop/conf/
 ADD hdfs/etc/hadoop/conf/hdfs-site.xml /etc/hadoop/conf/
+RUN chmod a+r -R /etc/hadoop/
 
 EXPOSE 50010 50020 50070 50075 50090 50091 50100 50105 50475 50470 8020 8485 8480 8481
 EXPOSE 50030 50060 13562 10020 19888
-
-# PostgreSQL
-
-RUN yum -y install postgresql-server postgresql postgresql-contrib pwgen
 
 
 # Sudo requires a tty. fix that.
@@ -96,11 +103,6 @@ EXPOSE 9083
 
 WORKDIR /
 
-# Impala
-
-RUN yum install -y impala impala-server impala-shell impala-catalog impala-state-store
-RUN yum clean all
-
 RUN groupadd supergroup; \ 
     usermod -a -G supergroup impala; \
     usermod -a -G hdfs impala; \
@@ -110,6 +112,7 @@ RUN groupadd supergroup; \
 ADD ./impala/etc/hadoop/conf/core-site.xml /etc/impala/conf/
 ADD ./impala/etc/hadoop/conf/hdfs-site.xml /etc/impala/conf/
 ADD ./impala/etc/impala/conf/hive-site.xml /etc/impala/conf/
+RUN chmod a+r -R /etc/impala/
 
 # Impala Ports
 EXPOSE 21000 21050 22000 23000 24000 25000 25010 26000 28000
@@ -134,6 +137,7 @@ ADD ./udafs/upload_udafs_to_hdfs.sh /
 ADD ./udafs/udaf_create_queries /
 
 RUN /build_udafs.sh
+
 
 ADD ./bin/supervisord-bootstrap.sh /
 ADD ./bin/wait-for-it.sh /
