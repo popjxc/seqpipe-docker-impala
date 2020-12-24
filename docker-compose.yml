@@ -3,6 +3,7 @@ services:
   impala-onebox:
     image: seqpipe/seqpipe-docker-impala
     hostname: "impala"
+    container_name: "impala"
     ports:
         - "21000:21000"
         - "21050:21050"
